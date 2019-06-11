@@ -8,5 +8,5 @@ https://start.spring.io/
 - Spring Data JPA
 - PostgreSQL Driver
 
-### Žd—l
+### ä»•æ§˜
 
