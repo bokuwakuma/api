@@ -2,10 +2,12 @@ package jp.alhinc.orchestra.api.payroll;
 
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -16,11 +18,11 @@ public class EmployeeController {
 
     private final EmployeeRepository repository;
 
-    private final EmployeeResourceAssember assembler;
+    private final EmployeeResourceAssembler assembler;
 
     // Injection
     EmployeeController(EmployeeRepository repository,
-                       EmployeeResourceAssember assembler) {
+                       EmployeeResourceAssembler assembler) {
         this.repository = repository;
         this.assembler = assembler;
     }
@@ -42,8 +44,11 @@ public class EmployeeController {
     }
 
     @PostMapping("/employees")
-    Employee newEmployee(@RequestBody Employee newEmployee) {
-        return repository.save(newEmployee);
+    ResponseEntity<?> newEmployee(@RequestBody Employee newEmployee) throws URISyntaxException {
+        Resource<Employee> resource = assembler.toResource(repository.save(newEmployee));
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
     }
 
     // Single item
@@ -63,8 +68,9 @@ public class EmployeeController {
     }
 
     @PutMapping("/employees/{id}")
-    Employee replaceEmployee(@RequestBody Employee newEmployee, @PathVariable Long id) {
-        return repository.findById(id)
+    ResponseEntity<?> replaceEmployee(@RequestBody Employee newEmployee, @PathVariable Long id) throws URISyntaxException {
+
+        Employee updatedEmployee = repository.findById(id)
                 .map(employee -> {
                     employee.setName(newEmployee.getName());
                     employee.setRole(newEmployee.getRole());
@@ -74,10 +80,17 @@ public class EmployeeController {
                     newEmployee.setId(id);
                     return repository.save(newEmployee);
                 });
+
+        Resource<Employee> resource = assembler.toResource(updatedEmployee);
+
+        return ResponseEntity.created(new URI(resource.getId().expand().getHref())).body(resource);
     }
 
-    @DeleteMapping("employees/{id}")
-    void deleteEmployee(@PathVariable Long id) {
+    @DeleteMapping("/employees/{id}")
+    ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
+
         repository.deleteById(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

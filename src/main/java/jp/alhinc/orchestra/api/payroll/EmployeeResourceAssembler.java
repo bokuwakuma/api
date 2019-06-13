@@ -8,7 +8,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @Component
-public class EmployeeResourceAssember implements ResourceAssembler<Employee, Resource<Employee>> {
+public class EmployeeResourceAssembler implements ResourceAssembler<Employee, Resource<Employee>> {
 
     @Override
     public Resource<Employee> toResource(Employee employee) {
@@ -16,7 +16,6 @@ public class EmployeeResourceAssember implements ResourceAssembler<Employee, Res
                 linkTo(methodOn(EmployeeController.class).one(employee.getId())).withSelfRel(),
                 linkTo(methodOn(EmployeeController.class).all()).withRel("employees"));
     }
-
 }
 
 
