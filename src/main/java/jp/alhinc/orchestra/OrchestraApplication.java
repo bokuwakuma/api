@@ -1,13 +1,13 @@
-package jp.alhinc.orchestra.api;
+package jp.alhinc.orchestra;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ApiApplication {
+public class OrchestraApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ApiApplication.class, args);
+		SpringApplication.run(OrchestraApplication.class, args);
 	}
 
 }
