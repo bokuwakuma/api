@@ -5,15 +5,41 @@
     <title>チケット管理</title>
 </head>
 <body>
-    <h1>チケット管理</h1>
-    <hr />
-    <div id="ticketList">
-        <ul th:each="ticket : ${ticketList}">
-            <li th:text="${ticket.id}"></li>
-            <li th:text="${ticket.title}"></li>
-            <li th:text="${ticket.text}"></li>
-            <li th:text="${ticket.createAt}"></li>
-        </ul>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>チケット管理</h1>
+            <p th:if="${validationError}" th:text="${validationError}">validation error</p>
+        </div>
+        <hr />
+
+        <!-- Form -->
+        <div class="main">
+            <form role="form" action="/ticket/create" th:action="@{/ticket/create}" th:object="ticketForm" method="post">
+                <div>
+                    <label><abbr title="required">*</abbr> タイトル</label>
+                    <input type="text" name="title" th:field="${ticketForm.title}" />
+                </div>
+                <div>
+                    <label><abbr title="required">*</abbr> 本文</label>
+                    <input type="text" name="text" th:field="*{text}" />
+                </div>
+                <button type="submit" class="btn">作成</button>
+            </form>
+        </div>
+        <hr />
+
+        <!-- Footer -->
+        <div id="ticketList">
+            <ul th:each="ticket : ${ticketList}">
+                <li th:text="${ticket.id}"></li>
+                <li th:text="${ticket.title}"></li>
+                <li th:text="${ticket.text}"></li>
+                <li th:text="${ticket.createAt}"></li>
+            </ul>
+        </div>
     </div>
+
+
 </body>
 </html>
