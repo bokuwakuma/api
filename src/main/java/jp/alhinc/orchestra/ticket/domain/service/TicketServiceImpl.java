@@ -48,7 +48,7 @@ public class TicketServiceImpl implements TicketService {
         ticket.setCreatedAt(new Date());
         ticket.setFinished(false);
 
-        ticketRepository.create(ticket);
+        ticketRepository.save(ticket);
 
         return ticket;
     }
@@ -63,7 +63,7 @@ public class TicketServiceImpl implements TicketService {
 
         ticket.setFinished(true);
 
-        ticketRepository.updateById(ticket);
+        ticketRepository.save(ticket);
 
         return ticket;
     }
@@ -71,6 +71,6 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public void delete(String id) {
         Ticket ticket = findOne(id);
-        ticketRepository.deleteById(ticket);
+        ticketRepository.deleteById(id);
     }
 }
