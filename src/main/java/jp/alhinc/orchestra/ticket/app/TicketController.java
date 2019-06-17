@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
+import javax.validation.groups.Default;
 import java.util.Collection;
 
 @Controller
@@ -32,6 +32,7 @@ public class TicketController {
 
     /**
      * This method equals "model.addAttribute("ticketForm", form)"
+     *
      * @return
      */
     @ModelAttribute
@@ -49,14 +50,17 @@ public class TicketController {
     }
 
     @PostMapping("create")
-    public String create(@Valid TicketForm ticketForm, BindingResult bindingResult,
+    public String create(@Validated({Default.class, TicketForm.TicketCreate.class}) TicketForm ticketForm, BindingResult bindingResult,
                          Model model, RedirectAttributes attributes) {
         // Error Check
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return list(model);
         }
 
         Ticket ticket = beanMapper.map(ticketForm, Ticket.class);
+
+        // for debug
+        logger.info(ticket.toString());
 
         try {
             ticketService.create(ticket);
@@ -66,6 +70,44 @@ public class TicketController {
         }
 
         attributes.addFlashAttribute("validationError", "Success");
+        return "redirect:/ticket/list";
+    }
+
+    @PostMapping("finish")
+    public String finish(@Validated({Default.class, TicketForm.TicketFinish.class}) TicketForm ticketForm,
+                    BindingResult bindingResult, Model model, RedirectAttributes attributes) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("validationError", "完了できません");
+            return list(model);
+        }
+
+        try {
+            ticketService.finish(ticketForm.getId());
+        } catch (RuntimeException e) {
+            model.addAttribute("validationError", e.getMessage());
+            return list(model);
+        }
+
+        attributes.addFlashAttribute("validationError", "Finished Success");
+        return "redirect:/ticket/list";
+    }
+
+    @PostMapping("delete")
+    public String delete(@Validated({Default.class, TicketForm.TicketDelete.class}) TicketForm ticketForm,
+                         BindingResult bindingResult, Model model, RedirectAttributes attributes) {
+
+        if(bindingResult.hasErrors()) {
+            return list(model);
+        }
+
+        try {
+            ticketService.delete(ticketForm.getId());
+        } catch (RuntimeException e) {
+            model.addAttribute("validationError", e.getMessage());
+            return list(model);
+        }
+
+        attributes.addFlashAttribute("validationError", "Deleted Successfully");
         return "redirect:/ticket/list";
     }
 }

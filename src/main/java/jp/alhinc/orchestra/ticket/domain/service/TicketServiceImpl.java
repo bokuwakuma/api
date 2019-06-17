@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -43,7 +44,7 @@ public class TicketServiceImpl implements TicketService {
         if(unfinishedCount >= MAX_UNFINISHED_COUNT) {
             throw new RuntimeException();
         }
-
+        ticket.setId(UUID.randomUUID().toString());
         ticket.setCreatedAt(new Date());
         ticket.setFinished(false);
 
