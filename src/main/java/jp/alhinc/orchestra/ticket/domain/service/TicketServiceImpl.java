@@ -1,7 +1,7 @@
 package jp.alhinc.orchestra.ticket.domain.service;
 
 import jp.alhinc.orchestra.ticket.domain.model.Ticket;
-import jp.alhinc.orchestra.ticket.domain.repository.TicketRepository;
+import jp.alhinc.orchestra.ticket.mapper.TicketMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +18,7 @@ public class TicketServiceImpl implements TicketService {
     private static final long MAX_UNFINISHED_COUNT = 5;
 
     @Autowired
-    TicketRepository ticketRepository;
+    TicketMapper ticketMapper;
 
     /**
      * 1.再利用性のため
@@ -27,7 +27,7 @@ public class TicketServiceImpl implements TicketService {
      * @return
      */
     private Ticket findOne(String id) {
-        Ticket ticket = (Ticket) ticketRepository.findById(id)
+        Ticket ticket = (Ticket) ticketMapper.findById(id)
                 .orElseThrow(() -> new RuntimeException());
         return ticket;
     }
@@ -35,12 +35,12 @@ public class TicketServiceImpl implements TicketService {
     @Override
     @Transactional(readOnly = true)
     public Collection<Ticket> findAll() {
-        return ticketRepository.findAll();
+        return ticketMapper.findAll();
     }
 
     @Override
     public Ticket create(Ticket ticket) {
-        long unfinishedCount = ticketRepository.countByFinished(false);
+        long unfinishedCount = ticketMapper.countByFinished(false);
         if(unfinishedCount >= MAX_UNFINISHED_COUNT) {
             throw new RuntimeException();
         }
@@ -48,7 +48,7 @@ public class TicketServiceImpl implements TicketService {
         ticket.setCreatedAt(new Date());
         ticket.setFinished(false);
 
-        ticketRepository.create(ticket);
+        ticketMapper.create(ticket);
 
         return ticket;
     }
@@ -63,7 +63,7 @@ public class TicketServiceImpl implements TicketService {
 
         ticket.setFinished(true);
 
-        ticketRepository.updateById(ticket);
+        ticketMapper.updateById(ticket);
 
         return ticket;
     }
@@ -71,6 +71,6 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public void delete(String id) {
         Ticket ticket = findOne(id);
-        ticketRepository.deleteById(ticket);
+        ticketMapper.deleteById(ticket);
     }
 }
