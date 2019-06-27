@@ -26,7 +26,9 @@ public class TicketServiceImpl implements TicketService {
      * @param id
      * @return
      */
-    private Ticket findOne(Integer id) {
+    @Override
+    @Transactional(readOnly = true)
+    public Ticket findOne(Integer id) {
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException());
         return ticket;

@@ -19,7 +19,7 @@ import javax.validation.groups.Default;
 import java.util.Collection;
 
 @Controller
-@RequestMapping("/ticket")
+@RequestMapping("ticket")
 public class TicketController {
 
     private static final Logger logger = LoggerFactory.getLogger(TicketController.class);
