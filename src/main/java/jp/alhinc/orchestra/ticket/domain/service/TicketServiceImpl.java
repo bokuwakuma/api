@@ -26,8 +26,8 @@ public class TicketServiceImpl implements TicketService {
      * @param id
      * @return
      */
-    private Ticket findOne(String id) {
-        Ticket ticket = (Ticket) ticketRepository.findById(id)
+    private Ticket findOne(Integer id) {
+        Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException());
         return ticket;
     }
@@ -44,7 +44,7 @@ public class TicketServiceImpl implements TicketService {
         if(unfinishedCount >= MAX_UNFINISHED_COUNT) {
             throw new RuntimeException();
         }
-        ticket.setId(UUID.randomUUID().toString());
+        //ticket.setId(UUID.randomUUID().toString());
         ticket.setCreatedAt(new Date());
         ticket.setFinished(false);
 
@@ -54,7 +54,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Ticket finish(String id) {
+    public Ticket finish(Integer id) {
         Ticket ticket = findOne(id);
         if(ticket.isFinished()) {
             // TODO
@@ -69,7 +69,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(Integer id) {
         Ticket ticket = findOne(id);
         ticketRepository.deleteById(id);
     }

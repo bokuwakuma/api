@@ -9,6 +9,6 @@ import java.util.Collection;
 public interface TicketService {
     Collection<Ticket> findAll();
     Ticket create(Ticket ticket);
-    Ticket finish(String id);
-    void delete(String id);
+    Ticket finish(Integer id);
+    void delete(Integer id);
 }

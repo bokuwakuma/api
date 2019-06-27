@@ -14,8 +14,10 @@ import java.util.Date;
 public class Ticket implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // Postgresの場合、テーブル定義はSERIAL
     @Column(name = "id")
-    private String id;
+    private Integer id;
 
     @NotNull
     @Size(min = 1, max = 60)
