@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <!-- デフォルト設定読み込み -->
-    <include resource="org/springframework/boot/logging/logback/base.xml" />
+    <!--<include resource="org/springframework/boot/logging/logback/base.xml" />-->
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern><![CDATA[%d{yyyy-MM-dd HH:mm:ss.SSS} %5p --- [%15.15t] %-50.50c{1.} : %m%n]]></pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE_OUT"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>test.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>test.%i.zip</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>20</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>50KB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern><![CDATA[%d{yyyy-MM-dd HH:mm:ss.SSS} %5p --- [%15.15t] %-50.50c{1.} : %m%n]]></pattern>
+        </encoder>
+    </appender>
+
     <logger name="org.springframework.web" level="DEBUG" />
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+        <!--<appender-ref ref="FILE_OUT" />-->
+    </root>
 </configuration>

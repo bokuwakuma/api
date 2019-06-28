@@ -24,7 +24,6 @@ import java.util.List;
  * @author bokuwakuma
  */
 @RestController
-@RequestMapping("/api/v1")
 public class TicketRestController {
 
     private static final Logger logger = LoggerFactory.getLogger(TicketRestController.class);
@@ -39,7 +38,7 @@ public class TicketRestController {
      * レコードを全件取得する
      * @return
      */
-    @GetMapping("tickets")
+    @RequestMapping("tickets")
     @ResponseStatus(HttpStatus.OK)
     public List<TicketResource> getTickets() {
         Collection<Ticket> tickets = ticketService.findAll();
@@ -56,7 +55,7 @@ public class TicketRestController {
      * @param id
      * @return
      */
-    @GetMapping("{id}")
+    @GetMapping("ticket/{id}")
     @ResponseStatus(HttpStatus.OK)
     public TicketResource getTicket(@PathVariable Integer id) {
         Ticket ticket = ticketService.findOne(id);
@@ -68,7 +67,7 @@ public class TicketRestController {
      * @param id
      * @return
      */
-    @PutMapping("{id}")
+    @PutMapping("ticket/{id}")
     @ResponseStatus(HttpStatus.OK)
     public TicketResource putTicket(@PathVariable Integer id) {
         Ticket finishedTicket = ticketService.finish(id);
@@ -80,7 +79,7 @@ public class TicketRestController {
      * @param ticketResource
      * @return
      */
-    @PostMapping("new")
+    @PostMapping("ticket/new")
     @ResponseStatus(HttpStatus.CREATED)
     public TicketResource createTicket(@RequestBody @Validated TicketResource ticketResource) {
         logger.info(beanMapper.map(ticketResource, Ticket.class).toString());
@@ -93,7 +92,7 @@ public class TicketRestController {
      * レコードを削除する
      * @param id
      */
-    @DeleteMapping("{id}")
+    @DeleteMapping("ticket/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTicket(@PathVariable Integer id) {
         ticketService.delete(id);

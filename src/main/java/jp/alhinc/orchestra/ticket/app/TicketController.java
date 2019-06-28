@@ -43,7 +43,6 @@ public class TicketController {
 
     @RequestMapping("list")
     public String list(Model model) {
-        logger.info("TicketController");
         Collection<Ticket> ticketList = ticketService.findAll();
         model.addAttribute("ticketList", ticketList);
         return "ticket/list";
