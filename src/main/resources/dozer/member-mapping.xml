@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozermapper.github.io/schema/bean-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozermapper.github.io/schema/bean-mapping
+          https://dozermapper.github.io/schema/bean-mapping.xsd">
+
+  <mapping map-id="member.update">
+    <class-a>jp.alhinc.orchestra.domain.model.Member</class-a>
+    <class-b>jp.alhinc.orchestra.domain.model.Member</class-b>
+    <field-exclude>
+      <a>memberId</a>
+      <b>memberId</b>
+    </field-exclude>
+    <field-exclude>
+      <a>credential</a>
+      <b>credential</b>
+    </field-exclude>
+    <field-exclude>
+      <a>createdAt</a>
+      <b>createdAt</b>
+    </field-exclude>
+    <field-exclude>
+      <a>lastModifiedAt</a>
+      <b>lastModifiedAt</b>
+    </field-exclude>
+    <field-exclude>
+      <a>version</a>
+      <b>version</b>
+    </field-exclude>
+  </mapping>
+
+</mappings>

@@ -74,7 +74,7 @@ public class TicketController {
 
     @PostMapping("finish")
     public String finish(@Validated({Default.class, TicketForm.TicketFinish.class}) TicketForm ticketForm,
-                    BindingResult bindingResult, Model model, RedirectAttributes attributes) {
+                         BindingResult bindingResult, Model model, RedirectAttributes attributes) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("validationError", "完了できません");
             return list(model);
@@ -95,7 +95,7 @@ public class TicketController {
     public String delete(@Validated({Default.class, TicketForm.TicketDelete.class}) TicketForm ticketForm,
                          BindingResult bindingResult, Model model, RedirectAttributes attributes) {
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return list(model);
         }
 

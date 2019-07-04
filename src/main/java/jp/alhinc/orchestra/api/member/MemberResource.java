@@ -1,5 +1,6 @@
 package jp.alhinc.orchestra.api.member;
 
+import jp.alhinc.orchestra.domain.model.Gender;
 import lombok.Data;
 
 import javax.validation.constraints.*;
@@ -7,6 +8,9 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
 
+/**
+ *
+ */
 @Data
 public class MemberResource implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -30,7 +34,7 @@ public class MemberResource implements Serializable {
     private String lastName;
 
     @NotEmpty
-    private String genderCode;
+    private Gender genderCode;
 
     @NotNull
     @Past
@@ -39,7 +43,7 @@ public class MemberResource implements Serializable {
     @NotEmpty
     @Size(max = 256)
     @Email
-    private String emaliAddress;
+    private String emailAddress;
 
     @Size(max = 20)
     private String phoneNumber;
