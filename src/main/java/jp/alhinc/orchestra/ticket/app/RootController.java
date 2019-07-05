@@ -12,15 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class RootController {
     @RequestMapping("/")
-    public String index(Model model,
-                        @RegisteredOAuth2AuthorizedClient OAuth2AuthorizedClient authorizedClient,
-                        @AuthenticationPrincipal OAuth2User oauth2User) {
+    public String index(Model model) {
         System.out.println("====RootController====");
         model.addAttribute("message", "Hello, World!!!");
-        model.addAttribute("userName", oauth2User.getName());
-        model.addAttribute("clientName", authorizedClient.getClientRegistration().getClientName());
-        model.addAttribute("userAttributes", oauth2User.getAttributes());
-
         return "index";
     }
 }
