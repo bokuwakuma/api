@@ -1,8 +1,8 @@
 package jp.alhinc.orchestra.ticket.api;
 
-import com.github.dozermapper.core.Mapper;
 import jp.alhinc.orchestra.ticket.domain.model.Ticket;
 import jp.alhinc.orchestra.ticket.domain.service.TicketService;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class TicketRestController {
     TicketService ticketService;
 
     @Autowired
-    Mapper beanMapper;
+    ModelMapper modelMapper;
 
     /**
      * レコードを全件取得する
@@ -45,7 +45,7 @@ public class TicketRestController {
         List<TicketResource> ticketResource = new ArrayList<>();
         for (Ticket ticket : tickets) {
             logger.info(ticket.toString());
-            ticketResource.add(beanMapper.map(ticket, TicketResource.class));
+            ticketResource.add(modelMapper.map(ticket, TicketResource.class));
         }
         return ticketResource;
     }
@@ -59,7 +59,7 @@ public class TicketRestController {
     @ResponseStatus(HttpStatus.OK)
     public TicketResource getTicket(@PathVariable Integer id) {
         Ticket ticket = ticketService.findOne(id);
-        return beanMapper.map(ticket, TicketResource.class);
+        return modelMapper.map(ticket, TicketResource.class);
     }
 
     /**
@@ -71,7 +71,7 @@ public class TicketRestController {
     @ResponseStatus(HttpStatus.OK)
     public TicketResource putTicket(@PathVariable Integer id) {
         Ticket finishedTicket = ticketService.finish(id);
-        return beanMapper.map(finishedTicket, TicketResource.class);
+        return modelMapper.map(finishedTicket, TicketResource.class);
     }
 
     /**
@@ -82,10 +82,10 @@ public class TicketRestController {
     @PostMapping("ticket/new")
     @ResponseStatus(HttpStatus.CREATED)
     public TicketResource createTicket(@RequestBody @Validated TicketResource ticketResource) {
-        logger.info(beanMapper.map(ticketResource, Ticket.class).toString());
-        Ticket createdTicket = ticketService.create(beanMapper.map(ticketResource, Ticket.class));
+        logger.info(modelMapper.map(ticketResource, Ticket.class).toString());
+        Ticket createdTicket = ticketService.create(modelMapper.map(ticketResource, Ticket.class));
         // MappingJackson2HttpMessageConverter
-        return beanMapper.map(createdTicket, TicketResource.class);
+        return modelMapper.map(createdTicket, TicketResource.class);
     }
 
     /**

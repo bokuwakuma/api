@@ -1,11 +1,10 @@
 package jp.alhinc.orchestra.domain.service.member;
 
-import com.github.dozermapper.core.Mapper;
 import jp.alhinc.orchestra.domain.model.Member;
 import jp.alhinc.orchestra.domain.model.MemberCredential;
 import jp.alhinc.orchestra.domain.repository.member.MemberRepository;
-import jp.alhinc.orchestra.domain.service.member.MemberService;
 import org.apache.ibatis.session.RowBounds;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
@@ -35,7 +34,7 @@ public class MemberServiceImpl implements MemberService {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    Mapper beanMapper;
+    ModelMapper modelMapper;
 
     @Override
     @Transactional(readOnly = true)
@@ -102,7 +101,7 @@ public class MemberServiceImpl implements MemberService {
     public Member update(String memberId, Member updatingMember) {
         Member member = findOne(memberId);
         // Member情報を上書きする
-        beanMapper.map(updatingMember, member, "member.update");
+        modelMapper.map(updatingMember, member, "member.update");
         Date currentDate = new Date();
         member.setLastModifiedAt(currentDate);
 

@@ -1,8 +1,8 @@
 package jp.alhinc.orchestra.ticket.app;
 
-import com.github.dozermapper.core.Mapper;
 import jp.alhinc.orchestra.ticket.domain.model.Ticket;
 import jp.alhinc.orchestra.ticket.domain.service.TicketService;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class TicketController {
     TicketService ticketService;
 
     @Autowired
-    Mapper beanMapper;
+    ModelMapper modelMapper;
 
     /**
      * This method equals "model.addAttribute("ticketForm", form)"
@@ -56,7 +56,7 @@ public class TicketController {
             return list(model);
         }
 
-        Ticket ticket = beanMapper.map(ticketForm, Ticket.class);
+        Ticket ticket = modelMapper.map(ticketForm, Ticket.class);
 
         // for debug
         logger.info(ticket.toString());

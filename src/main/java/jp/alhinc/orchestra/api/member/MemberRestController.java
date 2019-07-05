@@ -1,10 +1,10 @@
 package jp.alhinc.orchestra.api.member;
 
-import com.github.dozermapper.core.Mapper;
 import jp.alhinc.orchestra.api.member.MemberResource.PostMembers;
 import jp.alhinc.orchestra.api.member.MemberResource.PutMember;
 import jp.alhinc.orchestra.domain.model.Member;
 import jp.alhinc.orchestra.domain.service.member.MemberService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -25,7 +25,7 @@ public class MemberRestController {
     MemberService memberService;
 
     @Autowired
-    Mapper beanMapper;
+    ModelMapper modelMapper;
 
     /**
      * 名前検索
@@ -42,7 +42,7 @@ public class MemberRestController {
 
         List<MemberResource> memberResources = new ArrayList<>();
         for (Member member : page.getContent()) {
-            memberResources.add(beanMapper.map(member, MemberResource.class));
+            memberResources.add(modelMapper.map(member, MemberResource.class));
         }
         Page<MemberResource> responseResource = new PageImpl<>(memberResources, pageable, page.getTotalElements());
         return responseResource;
@@ -53,16 +53,16 @@ public class MemberRestController {
      *
      * @return
      */
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public List<MemberResource> getMembers() {
-        List<Member> members = memberService.findAll();
-        List<MemberResource> memberResources = new ArrayList<>();
-        for (Member member : members) {
-            memberResources.add(beanMapper.map(member, MemberResource.class));
-        }
-        return memberResources;
-    }
+//    @GetMapping
+//    @ResponseStatus(HttpStatus.OK)
+//    public List<MemberResource> getMembers() {
+//        List<Member> members = memberService.findAll();
+//        List<MemberResource> memberResources = new ArrayList<>();
+//        for (Member member : members) {
+//            memberResources.add(beanMapper.map(member, MemberResource.class));
+//        }
+//        return memberResources;
+//    }
 
     /**
      * ページ検索
@@ -98,7 +98,7 @@ public class MemberRestController {
     @ResponseStatus(HttpStatus.OK)
     public MemberResource getMember(@PathVariable("memberId") String memberId) {
         Member member = memberService.findOne(memberId);
-        MemberResource responseResource = beanMapper.map(member, MemberResource.class);
+        MemberResource responseResource = modelMapper.map(member, MemberResource.class);
         return responseResource;
     }
 
@@ -111,9 +111,9 @@ public class MemberRestController {
     @ResponseStatus(HttpStatus.CREATED)
     public MemberResource postMembers(@RequestBody @Validated({PostMembers.class, Default.class})
                                               MemberResource requestedResource) {
-        Member creatingMember = beanMapper.map(requestedResource, Member.class);
+        Member creatingMember = modelMapper.map(requestedResource, Member.class);
         Member createdMember = memberService.create(creatingMember);
-        MemberResource responseResource = beanMapper.map(createdMember, MemberResource.class);
+        MemberResource responseResource = modelMapper.map(createdMember, MemberResource.class);
         return responseResource;
     }
 
@@ -129,9 +129,9 @@ public class MemberRestController {
             @PathVariable("memberId") String memberId,
             @RequestBody @Validated({PutMember.class, Default.class}) MemberResource requestedResource
     ) {
-        Member updatingMember = beanMapper.map(requestedResource, Member.class);
+        Member updatingMember = modelMapper.map(requestedResource, Member.class);
         Member updatedMember = memberService.update(memberId, updatingMember);
-        MemberResource responseResource = beanMapper.map(updatedMember, MemberResource.class);
+        MemberResource responseResource = modelMapper.map(updatedMember, MemberResource.class);
 
         return responseResource;
     }
