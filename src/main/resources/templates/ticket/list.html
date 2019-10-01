@@ -15,7 +15,7 @@
 
   <!-- Form -->
   <div class="main">
-    <form role="form" action="/ticket/create" th:action="@{/ticket/create}" th:object="${ticketForm}" method="post">
+    <form role="form" action="#" th:action="@{/ticket/create}" th:object="${ticketForm}" method="post">
       <div>
         <label><abbr title="required">*</abbr> タイトル</label>
         <input type="text" name="title" th:field="${ticketForm.title}"/>

@@ -1,8 +1,8 @@
 package jp.alhinc.orchestra.ticket.app;
 
-import com.github.dozermapper.core.Mapper;
 import jp.alhinc.orchestra.ticket.domain.model.Ticket;
 import jp.alhinc.orchestra.ticket.domain.service.TicketService;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import javax.validation.groups.Default;
 import java.util.Collection;
 
 @Controller
-@RequestMapping("/ticket")
+@RequestMapping("ticket")
 public class TicketController {
 
     private static final Logger logger = LoggerFactory.getLogger(TicketController.class);
@@ -28,7 +28,7 @@ public class TicketController {
     TicketService ticketService;
 
     @Autowired
-    Mapper beanMapper;
+    ModelMapper modelMapper;
 
     /**
      * This method equals "model.addAttribute("ticketForm", form)"
@@ -43,7 +43,6 @@ public class TicketController {
 
     @RequestMapping("list")
     public String list(Model model) {
-        logger.info("TicketController");
         Collection<Ticket> ticketList = ticketService.findAll();
         model.addAttribute("ticketList", ticketList);
         return "ticket/list";
@@ -57,7 +56,7 @@ public class TicketController {
             return list(model);
         }
 
-        Ticket ticket = beanMapper.map(ticketForm, Ticket.class);
+        Ticket ticket = modelMapper.map(ticketForm, Ticket.class);
 
         // for debug
         logger.info(ticket.toString());
@@ -75,7 +74,7 @@ public class TicketController {
 
     @PostMapping("finish")
     public String finish(@Validated({Default.class, TicketForm.TicketFinish.class}) TicketForm ticketForm,
-                    BindingResult bindingResult, Model model, RedirectAttributes attributes) {
+                         BindingResult bindingResult, Model model, RedirectAttributes attributes) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("validationError", "完了できません");
             return list(model);
@@ -96,7 +95,7 @@ public class TicketController {
     public String delete(@Validated({Default.class, TicketForm.TicketDelete.class}) TicketForm ticketForm,
                          BindingResult bindingResult, Model model, RedirectAttributes attributes) {
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return list(model);
         }
 

@@ -1,15 +1,12 @@
 package jp.alhinc.orchestra.ticket.domain.repository;
 
 import jp.alhinc.orchestra.ticket.domain.model.Ticket;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-import java.util.Collection;
-import java.util.Optional;
+public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 
-public interface TicketRepository {
-    Optional<Ticket> findById(String id);
-    Collection<Ticket> findAll();
-    void create(Ticket ticket);
-    boolean updateById(Ticket ticket);
-    void deleteById(Ticket ticket);
-    long countByFinished(boolean finished);
+    @Query("SELECT COUNT(t) FROM Ticket t WHERE t.finished = :finished")
+    long countByFinished(@Param("finished") boolean finished);
 }
